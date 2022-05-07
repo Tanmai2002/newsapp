@@ -3,23 +3,62 @@ import Newsitem from './Newsitem'
 
 export class News extends Component {
     api='563b86e1120b463c9b33bb1f8ee9c6ec';
+   api2='4f5fc9d993b941dcb8971168282d04c0';
+    constructor(){
+        super();
+        this.state={
+            articles : [],
+            page :1,
+            totalPages : 1,
+            pageSize : 9,
+
+        }
+    }
+    async componentDidMount(){
+      let url=`https://newsapi.org/v2/top-headlines?country=in&apiKey=${this.api2}&pageSize=9`
+      let data=await fetch(url)
+      let json_data=await data.json()
+      console.log(json_data)
+      this.setState({articles : json_data.articles,page :1 , total_results : json_data.totalResults, pageSize :9})
+    }
+
+    nextButtonClicked =async ()=>{
+      let url=`https://newsapi.org/v2/top-headlines?country=in&apiKey=${this.api2}&pageSize=9&page=${this.state.page+1}`
+      let data=await fetch(url)
+      let json_data=await data.json()
+      console.log(json_data)
+      this.setState({articles : json_data.articles,page :this.state.page+1})
+
+    }
+    previousButtonClicked= async ()=>{
+      let url=`https://newsapi.org/v2/top-headlines?country=in&apiKey=${this.api2}&pageSize=9&page=${this.state.page-1}`
+      let data=await fetch(url)
+      let json_data=await data.json()
+      console.log(json_data)
+      this.setState({articles : json_data.articles,page :this.state.page-1})
+    }
   render() {
+      
     return (
       <div className='container my-3'>
           <h1>Top Headlines</h1>
           <div className='row'>
-                <div className="col-md-4 my-2">
-                    <Newsitem title='Title' desc='My Description' img='https://www.gannett-cdn.com/presto/2022/03/28/USAT/ec6656d3-2dd0-4a28-9561-51bf3da38a44-USP_Entertainment__94th_Academy_Awards_-_Show_13.jpg?auto=webp&crop=6719,3780,x0,y341&format=pjpg&width=1200'/>
+                    {this.state.articles.map((element)=>{
+                            console.log(element);
+                return <div key={element.id}  className="col-md-4 my-2">
+                            <Newsitem title={element.title==null?"":element.title} desc={element.description==null?"":element.description.slice(0,88)} img={element.urlToImage} newsurl={element.url}/>
+                            
                 </div>
-                <div className="col-md-4 my-2">
-                <Newsitem title='Title' desc='My Description' img='https://www.gannett-cdn.com/presto/2022/03/28/USAT/ec6656d3-2dd0-4a28-9561-51bf3da38a44-USP_Entertainment__94th_Academy_Awards_-_Show_13.jpg?auto=webp&crop=6719,3780,x0,y341&format=pjpg&width=1200'/>
-                </div>
-                <div className="col-md-4 my-2">
-                <Newsitem title='Title' desc='My Description' img='https://www.gannett-cdn.com/presto/2022/03/28/USAT/ec6656d3-2dd0-4a28-9561-51bf3da38a44-USP_Entertainment__94th_Academy_Awards_-_Show_13.jpg?auto=webp&crop=6719,3780,x0,y341&format=pjpg&width=1200'/>
-                </div>
-                <div className="col-md-4 my-2">
-                <Newsitem title='Title' desc='My Description' img='https://www.gannett-cdn.com/presto/2022/03/28/USAT/ec6656d3-2dd0-4a28-9561-51bf3da38a44-USP_Entertainment__94th_Academy_Awards_-_Show_13.jpg?auto=webp&crop=6719,3780,x0,y341&format=pjpg&width=1200'/>
-                </div>
+                    }
+                    )
+                    
+            
+                    }
+          <div className='container d-flex justify-content-between'>
+            <button disabled={this.state.page <=1} className='btn btn-primary' onClick={this.previousButtonClicked}>Previous</button>
+            <button disabled={this.state.page== Math.ceil(this.state.total_results/this.state.pageSize)} className='btn btn-primary' onClick={this.nextButtonClicked}>Next</button>
+          </div>
+                 
           </div>
       </div>
     )
