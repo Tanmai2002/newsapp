@@ -1,9 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 import spiner from '../spinner4.gif'
 
-export class Newsitem extends Component {
-  render() {
-      let {title, desc,img,newsurl}=this.props;
+  const Newsitem=(props)=> {
+      let {title, desc,img,newsurl}=props;
     return (
         <div className="card" style={{width: "18rem"}}>
         <img src={img} placeholder={spiner} className="card-img-top" alt="..."/>
@@ -15,6 +14,6 @@ export class Newsitem extends Component {
       </div>
     )
   }
-}
+
 
 export default Newsitem

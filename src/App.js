@@ -1,26 +1,26 @@
-import logo from './logo.svg';
+
 import './App.css';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
 } from "react-router-dom";
-import React, { Component } from 'react'
+import React from 'react'
 import Navbar from './components/Navbar';
 import News from './components/News';
 
-export default class App extends Component {
+const App=()=>{
   
-l=['business','entertainment','general','health','science','sports','technology']
-  render() {
+let l=['business','entertainment','general','health','science','sports','technology']
+ 
     return (
       <div>
       <Router>
         <Navbar/>
         <Routes>
         
-        {this.l.map((e)=>{
-          return <Route exact path={`/${e}`}  element={<News key={e} category={e}/>}/>
+        {l.map((e,k)=>{
+          return <Route key={k} exact path={`/${e}`}  element={<News key={e} category={e}/>}/>
         })}
         <Route exact path={`/`}  element={<News key='general' category={'general'}/>}/>
         </Routes>
@@ -29,6 +29,7 @@ l=['business','entertainment','general','health','science','sports','technology'
       </Router>
       </div>
     )
-  }
+  
 }
 
+export default App;
